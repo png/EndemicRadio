@@ -25,7 +25,7 @@ SECRET_KEY = 'a1hofd2ka!cy-m(a&g31!hd=da1g4*(31zh46d%l!f4==#8mf('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["endemicradio.herokuapp.com"]
 
 
 # Application definition
