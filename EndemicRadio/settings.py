@@ -33,7 +33,6 @@ ALLOWED_HOSTS = ['endemicradio.herokuapp.com',
 # Application definition
 
 INSTALLED_APPS = [
-    'stream.apps.StreamConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
