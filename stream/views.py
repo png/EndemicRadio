@@ -14,3 +14,6 @@ def musicpage(request):
 
 def logout(request):
     return render(request, 'stream/logout.html', {})
+
+def player(request):
+    return render(request, 'stream/player.html', {})
