@@ -53,15 +53,16 @@
 
 <div class="container-fluid">
 
-<a class="btn btn-primary" href="/logout">
-    Logout
-  </a>
 
-<form method = "post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Upload</button>
-    </form>
+    <div style="background:!important" class="jumbotron">
+        <p>Submit a picture of your band or an image of your album cover to get the chance to be highlighted in the slideshow above!</p>
+
+        <form method = "post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Upload</button>
+        </form>
+    </div>
 </div>
 
 
