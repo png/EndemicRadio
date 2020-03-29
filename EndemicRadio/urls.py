@@ -20,7 +20,8 @@ from django.conf.urls.static import static
 
 
 
+# https://www.webforefront.com/django/accessurlparamstemplates.html
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('stream.urls'))
+    path('', include('stream.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import os, dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +26,9 @@ SECRET_KEY = 'a1hofd2ka!cy-m(a&g31!hd=da1g4*(31zh46d%l!f4==#8mf('
 DEBUG = True
 
 ALLOWED_HOSTS = ['endemicradio.herokuapp.com',
-                 'localhost']
+                 '127.0.0.1',
+                 'localhost',
+                 'endemicradio.online']
 
 
 # Application definition
@@ -56,7 +58,7 @@ ROOT_URLCONF = 'EndemicRadio.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, "templates"),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,12 +77,19 @@ WSGI_APPLICATION = 'EndemicRadio.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if "DATABASE_URL" in os.environ:
+    print("On Heroku")
+    DATABASES = {
+        'default': dj_database_url.config()
     }
-}
+else:
+    print("On Local")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 
 # Password validation
@@ -128,4 +137,3 @@ STATICFILES_DIRS = (
 
 MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'
-
