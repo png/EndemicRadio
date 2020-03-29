@@ -15,7 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from stream.views import wikipediaUpdate, getPlaylistByRegion
 
+# https://www.webforefront.com/django/accessurlparamstemplates.html
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('wikipediaUpdate/', wikipediaUpdate),
+    path('playlist/<slug:regionName>', wikipediaUpdate)
 ]
