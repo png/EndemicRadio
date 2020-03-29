@@ -17,10 +17,14 @@ from django.contrib import admin
 from django.urls import include,path
 from django.conf import settings
 from django.conf.urls.static import static
+from stream.views import wikipediaUpdate, getPlaylistByRegion
 
 
 
+# https://www.webforefront.com/django/accessurlparamstemplates.html
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('stream.urls'))
+    path('wikipediaUpdate/', wikipediaUpdate),
+    path('playlist/<slug:regionName>', getPlaylistByRegion)
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
