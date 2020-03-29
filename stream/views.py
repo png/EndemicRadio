@@ -54,7 +54,8 @@ def player(request, location):
 
 def locationSelect(request):
     #determine user location
-    pass
+
+    return render(request, 'stream/selectlocation.html', {})
 
 def wikipediaUpdate(request):
 
