@@ -5,13 +5,21 @@ from django.db import models
 class Artist(models.Model):
     artistName = models.CharField(max_length=100, unique=True)
     artistLocation = models.CharField(max_length=100)
-
+    spotifyId = models.CharField(max_length=100, null=True, blank=True)
+    profileImageLink = models.CharField(max_length=500, null=True,blank=True)
 
     @classmethod
     def create(cls, artistName, artistLocation):
         newArtist = cls(artistName=artistName, artistLocation=artistLocation)
         newArtist.save()
         return newArtist
+
+    def integrateSpotify(self, spotifyId, profileImageLink):
+        self.spotifyId = spotifyId
+        self.profileImageLink = profileImageLink
+        self.save()
+        return self
+
 
 class Song(models.Model):
     songName = models.CharField(max_length=100)

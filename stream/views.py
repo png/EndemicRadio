@@ -6,10 +6,10 @@ from .models import Artist, Song
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+import spotipy.util as util
 
-SPOTIPY_CLIENT_ID="301991271dc74862a88cdc605316852b"
-SPOTIPY_CLIENT_SECRET="68c5eae2f0754840985cc8793db15e5e"
+SPOTIPY_CLIENT_ID="ae3080ed7da64ddeb73aac2b7be0b86c"
+SPOTIPY_CLIENT_SECRET="3bfc3c5c449046d09dca01182c66e589"
 
 def wikipediaUpdate(request):
     introText = "Category:Musical groups from "
@@ -33,19 +33,51 @@ def wikipediaUpdate(request):
                 curArtist = Artist.create(artist["title"], category["title"][lengthIntro:])
     return render(request, 'wikipedia.html')
 
-def buildSongList(request):
-    results = sp.search(q='weezer', limit=20)
-    for idx, track in enumerate(results['tracks']['items']):
-        print(idx, track['name'])
 
+# https://developer.spotify.com/console/get-search-item/?q=Muse&type=track%2Cartist&market=US&limit=10&offset=5
+def getSongFromArtist(artist):
+    token = util.prompt_for_user_token("zac",
+                           "streaming",
+                           client_id=SPOTIPY_CLIENT_ID,
+                           client_secret=SPOTIPY_CLIENT_SECRET,
+                           redirect_uri='http://endemicradio.herokuapp.com/')
+    spotify = spotipy.Spotify(auth=token)
+    sp = spotify
+    if (artist.spotifyId == None): # get spotify Id if not received yet
+        results = sp.search(q=artist.artistName.replace(" ", "+"), limit=20, type='artist') # encode spaces with '+'s
+        # print(results)
+        # try:
+        print(artist.artistName)
+        try:
+            curArtist = results["artists"]["items"][0] # get the first entry that comes from the search
+            artist.integrateSpotify(curArtist["uri"], curArtist["images"][0]["url"])
+        except:
+            return
+        # except:
+            # return
+
+    # populate song information in DB    
+    trackResults = spotify.artist_top_tracks(artist.spotifyId)
+    # print("tracks")
+    # print(trackResults)
+    for track in trackResults['tracks'][:10]:
+        Song.create(track["name"], track["uri"], artist)
+
+#
+# playlist/<slug:regionName>'
+#
 def getPlaylistByRegion(request, regionName):
+    regionName = regionName.replace("_"," ").replace("-", ",")
     songList = [] # list of spotify ids
-    artists = Artist.objects.filter(artistLocation=regionId)
+    artists = Artist.objects.filter(artistLocation=regionName)
     for artist in artists:
         songs = Song.objects.filter(artistId=artist.id)
+        if len(songs) == 0:
+            getSongFromArtist(artist) # get from spotify and populate datatbase on requets for artist
         for song in songs:
             songList.append(song.spotifyId)
-    resp = json.dumps(songList)
+    # resp = json.dumps(songList)
+    resp = {"songs":songList}
     return JsonResponse(resp)
 
 

@@ -21,5 +21,5 @@ from stream.views import wikipediaUpdate, getPlaylistByRegion
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('wikipediaUpdate/', wikipediaUpdate),
-    path('playlist/<slug:regionName>', wikipediaUpdate)
+    path('playlist/<slug:regionName>', getPlaylistByRegion)
 ]
