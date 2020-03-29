@@ -26,6 +26,7 @@ SECRET_KEY = 'a1hofd2ka!cy-m(a&g31!hd=da1g4*(31zh46d%l!f4==#8mf('
 DEBUG = True
 
 ALLOWED_HOSTS = ['endemicradio.herokuapp.com',
+                 '127.0.0.1',
                  'localhost',
                  'endemicradio.online']
 
