@@ -21,8 +21,13 @@ import spotipy.util as util
 SPOTIPY_CLIENT_ID="ae3080ed7da64ddeb73aac2b7be0b86c"
 SPOTIPY_CLIENT_SECRET="3bfc3c5c449046d09dca01182c66e589"
 
+
 def login(request):
     return render(request, 'stream/login.html', {})
+
+
+def about(request):
+    return render(request, 'stream/about.html', {})
 
 
 def musicpage(request):

@@ -9,6 +9,7 @@ urlpatterns = [
     path('player/<slug:location>', views.player, name='player'),
     path('select/', views.locationSelect, name='selectLocation'),
     path('logout/', views.logout, name='logout'),
+    path('about/', views.about, name='about'),
     path('wikipediaUpdate/', views.wikipediaUpdate),
     path('playlist/<slug:regionName>', views.getPlaylistByRegion)
 ]
