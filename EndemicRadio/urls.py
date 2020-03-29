@@ -24,7 +24,7 @@ from stream.views import wikipediaUpdate, getPlaylistByRegion
 # https://www.webforefront.com/django/accessurlparamstemplates.html
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('stream.urls'))
+    path('', include('stream.urls')),
     path('wikipediaUpdate/', wikipediaUpdate),
     path('playlist/<slug:regionName>', getPlaylistByRegion)
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
