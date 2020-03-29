@@ -10,7 +10,8 @@ from django.http import JsonResponse
 
 import json
 import requests
-from .models import Artist, Song
+import random
+from .models import Artist, Song, Location
 
 
 import spotipy
@@ -50,36 +51,52 @@ def success(request):
 def logout(request):
     return render(request, 'stream/logout.html', {})
 
-def player(request):
-    return render(request, 'stream/player.html', {})
+def player(request, location):
+    #generate player
+    songList = getPlaylistByRegionFunc(location)
+    imageList = None
+    return render(request, 'stream/player.html', {"songs":songList, "images":imageList})
+
+def locationSelect(request):
+    #determine user location
+    pass
 
 def wikipediaUpdate(request):
-    introText = "Category:Musical groups from "
-    lengthIntro = len(introText)
 
     query = "https://en.wikipedia.org/w/api.php?cmdir=desc&format=json&list=categorymembers&action=query&cmlimit=500&cmtitle="
-    searches = ["Category:Musical_groups_by_city_in_the_United_States", "Category:American_musicians_by_city"]
+    searches = [["Category:Musical_groups_by_city_in_the_United_States", "Category:Musical groups from "], ["Category:American_musicians_by_city", "Category:Musicians_from_"]]
     for search in searches:
-        response = requests.get(query+search)
+        response = requests.get(query+search[0])
+        introText = search[1]
+        lengthIntro = len(introText)
         if response.status_code == 200:
             content = json.loads(response.text)
             categories = content["query"]["categorymembers"]
             for category in categories:
-                print(category["title"][lengthIntro:])
-                regionQueryName = category["title"].replace(" ", "_")
-                regionResponse = requests.get(query+regionQueryName)
-                regionContent = json.loads(regionResponse.text)
-                artists = regionContent["query"]["categorymembers"]
-                for artist in artists:
-                    if artist["ns"] != 0: # additional subgroup
-                        continue
-                    Artist.objects.filter(artistName=artist["title"]).delete() # remove redundancies
-                    curArtist = Artist.create(artist["title"], category["title"][lengthIntro:])
+                if "Virginia" in category["title"] or "D.C." in category["title"]:
+                    location = category["title"][lengthIntro:]
+                    if("D.C." in location):
+                        print("Found DC")
+                        location = "Washington_DC"
+                    Location.create(category["title"][lengthIntro:])
+                    regionQueryName = category["title"].replace(" ", "_")
+                    regionResponse = requests.get(query+regionQueryName)
+                    regionContent = json.loads(regionResponse.text)
+                    artists = regionContent["query"]["categorymembers"]
+                    for artist in artists:
+                        if artist["ns"] != 0: # additional subgroup
+                            continue
+                        print(artist["title"])
+                        Artist.objects.filter(artistName=artist["title"]).delete() # remove redundancies
+                        curArtist = Artist.create(artist["title"], category["title"][lengthIntro:])
+
     return render(request, 'wikipedia.html')
 
 
 # https://developer.spotify.com/console/get-search-item/?q=Muse&type=track%2Cartist&market=US&limit=10&offset=5
+availableSongs=["bensound-summer.mp3", "bensound-tomorrow.mp3", "bensound-creativeminds.mp3", "bensound-ukulele.mp3"]
 def getSongFromArtist(artist):
+
     token = util.prompt_for_user_token("zac",
                            "streaming",
                            client_id=SPOTIPY_CLIENT_ID,
@@ -87,30 +104,43 @@ def getSongFromArtist(artist):
                            redirect_uri='http://endemicradio.herokuapp.com/')
     spotify = spotipy.Spotify(auth=token)
     sp = spotify
-    if (artist.spotifyId == None): # get spotify Id if not received yet
+
+    if (artist.spotifyId == None and not artist.searchedSpotify): # get spotify Id if not received yet
         results = sp.search(q=artist.artistName.replace(" ", "+"), limit=20, type='artist') # encode spaces with '+'s
         # print(results)
         # try:
-        print(artist.artistName)
+        print("Searching for", artist.artistName)
         try:
             curArtist = results["artists"]["items"][0] # get the first entry that comes from the search
             artist.integrateSpotify(curArtist["uri"], curArtist["images"][0]["url"])
+            artist.searchedSpotifyDone()
         except:
+            print("No Spotify Results for", artist.artistName)
+            artist.searchedSpotifyDone()
             return
-        # except:
+
+        trackResults = spotify.artist_top_tracks(artist.spotifyId)
+
+        # print("tracks")
+        # print(trackResults)
+        for track in trackResults['tracks'][:10]:
+            print(track["name"])
+            Song.create(track["name"], random.choice(availableSongs), artist)
+            #Song.create(track["name"], track["uri"], artist)
             # return
 
+
     # populate song information in DB
-    trackResults = spotify.artist_top_tracks(artist.spotifyId)
-    # print("tracks")
-    # print(trackResults)
-    for track in trackResults['tracks'][:10]:
-        Song.create(track["name"], track["uri"], artist)
+
 
 #
 # playlist/<slug:regionName>'
 #
 def getPlaylistByRegion(request, regionName):
+    return JsonResponse(getPlaylistByRegionFunc(regionName))
+
+
+def getPlaylistByRegionFunc(regionName):
     regionName = regionName.replace("_"," ").replace("-", ",")
     songList = [] # list of spotify ids
     artists = Artist.objects.filter(artistLocation=regionName)
@@ -119,10 +149,16 @@ def getPlaylistByRegion(request, regionName):
         if len(songs) == 0:
             getSongFromArtist(artist) # get from spotify and populate datatbase on requets for artist
         for song in songs:
-            songList.append(song.spotifyId)
+            songList.append({
+                "url" : song.songUrl,
+                "title" : song.songName,
+                "artist" : artist.artistName,
+                })
     # resp = json.dumps(songList)
-    resp = {"songs":songList}
-    return JsonResponse(resp)
+    random.shuffle(songList)
+    resp = {"songs":(songList)}
+    return resp
+
 
 
 
