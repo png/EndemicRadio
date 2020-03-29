@@ -59,8 +59,21 @@ def player(request, location):
 
 def locationSelect(request):
     #determine user location
+    if request.method == "POST":
+        pass
+    else:
+        locations = Location.objects.all()
+    return render(request, 'stream/selectlocation.html', {'locations':locations})
 
-    return render(request, 'stream/selectlocation.html', {})
+def getArtistsByRegion(request, region):
+    print(region)
+    regionName = region.replace("_"," ").replace("-", ",")
+    artists = Artist.objects.filter(artistLocation=regionName)
+    artistList = {'names':[]}
+    for artist in artists:
+        artistList['names'].append(artist.artistName)
+    print(artistList)
+    return JsonResponse(artistList)
 
 def wikipediaUpdate(request):
 
@@ -78,8 +91,8 @@ def wikipediaUpdate(request):
                     location = category["title"][lengthIntro:]
                     if("D.C." in location):
                         print("Found DC")
-                        location = "Washington_DC"
-                    Location.create(category["title"][lengthIntro:])
+                        location = "Washington, DC"
+                    Location.create(location)
                     regionQueryName = category["title"].replace(" ", "_")
                     regionResponse = requests.get(query+regionQueryName)
                     regionContent = json.loads(regionResponse.text)

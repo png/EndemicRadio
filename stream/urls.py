@@ -11,5 +11,6 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('about/', views.about, name='about'),
     path('wikipediaUpdate/', views.wikipediaUpdate),
-    path('playlist/<slug:regionName>', views.getPlaylistByRegion)
+    path('playlist/<slug:regionName>', views.getPlaylistByRegion),
+    path('artists/<slug:region>', views.getArtistsByRegion)
 ]

@@ -1,6 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
+<meta name="csrf-token" content="{{ csrf_token }}">
 
-{{LocationForm.as_p}}
+<h5>Note that only Charlottesville and Richmond will work for this demo due to resource limitations.</h5>
+
+<label for="selection">Choose a city:</label>
+
+<script>
+function getArtists(){
+    var addr = "/artists/"+$("#selection option:selected").text().replace(" ","_").replace(",", "-");
+    $.get( addr, function( data ) {
+        console.log(data);
+        var text = "Listen to " + data['names'].toString().split(',').join(', ')
+        text += ", and more!"
+        console.log(text);
+        $(dropNames).text(text)
+    });
+}
+</script>
+
+<form>
+    {% csrf_token %}
+    <select id="selection" onchange=getArtists()>
+        <option disabled selected value> -- select an option -- </option>
+        {% for location in locations %}
+        <option value="{{ location.name }}">{{ location.name }}</option>
+        {% endfor %}
+    </select>
+</form>
+
+
+<p>Select a location to view artists!</p>
+<p id="dropNames"></p>
 
 {% endblock content %}
