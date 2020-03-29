@@ -8,13 +8,16 @@
 
 <script>
 function getArtists(){
-    var addr = "/artists/"+$("#selection option:selected").text().replace(" ","_").replace(",", "-");
+    var postfix = $("#selection option:selected").text().replace(" ","_").replace(",", "-");
+    var addr = "/artists/"+postfix;
     $.get( addr, function( data ) {
         console.log(data);
         var text = "Listen to " + data['names'].toString().split(',').join(', ')
         text += ", and more!"
         console.log(text);
         $(dropNames).text(text)
+        $('#playerGo').removeClass("disabled")
+        $('#playerGo').attr("href", "/player/"+postfix)
     });
 }
 </script>
@@ -29,8 +32,9 @@ function getArtists(){
     </select>
 </form>
 
-
 <p>Select a location to view artists!</p>
 <p id="dropNames"></p>
+
+<a id="playerGo" href="#" class="btn btn-primary disabled">Listen now!</a>
 
 {% endblock content %}
