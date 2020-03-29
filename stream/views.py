@@ -32,21 +32,23 @@ def wikipediaUpdate(request):
     lengthIntro = len(introText)
 
     query = "https://en.wikipedia.org/w/api.php?cmdir=desc&format=json&list=categorymembers&action=query&cmlimit=500&cmtitle="
-    response = requests.get(query+"Category:Musical_groups_by_city_in_the_United_States")
-    if response.status_code == 200:
-        content = json.loads(response.text)
-        categories = content["query"]["categorymembers"]
-        for category in categories:
-            print(category["title"][lengthIntro:])
-            regionQueryName = category["title"].replace(" ", "_")
-            regionResponse = requests.get(query+regionQueryName)
-            regionContent = json.loads(regionResponse.text)
-            artists = regionContent["query"]["categorymembers"]
-            for artist in artists:
-                if artist["ns"] != 0: # additional subgroup
-                    continue
-                Artist.objects.filter(artistName=artist["title"]).delete() # remove redundancies
-                curArtist = Artist.create(artist["title"], category["title"][lengthIntro:])
+    searches = ["Category:Musical_groups_by_city_in_the_United_States", "Category:American_musicians_by_city"]
+    for search in searches:
+        response = requests.get(query+search)
+        if response.status_code == 200:
+            content = json.loads(response.text)
+            categories = content["query"]["categorymembers"]
+            for category in categories:
+                print(category["title"][lengthIntro:])
+                regionQueryName = category["title"].replace(" ", "_")
+                regionResponse = requests.get(query+regionQueryName)
+                regionContent = json.loads(regionResponse.text)
+                artists = regionContent["query"]["categorymembers"]
+                for artist in artists:
+                    if artist["ns"] != 0: # additional subgroup
+                        continue
+                    Artist.objects.filter(artistName=artist["title"]).delete() # remove redundancies
+                    curArtist = Artist.create(artist["title"], category["title"][lengthIntro:])
     return render(request, 'wikipedia.html')
 
 
