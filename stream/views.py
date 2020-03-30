@@ -58,8 +58,9 @@ def logout(request):
 def player(request, location):
     #generate player
     songList = getPlaylistByRegionFunc(location)
+    locationUrl = location.replace("_"," ").replace("-", ",")
     imageList = None
-    return render(request, 'stream/player.html', {"songs":songList, "images":imageList, "location":location})
+    return render(request, 'stream/player.html', {"songs":songList, "images":imageList, "location":location, "locationUrl":locationUrl, "startUrl":songList['songs'][0]['url'], "startString":songList['songs'][0]['artist']+" - "+songList['songs'][0]['title']})
 
 def locationSelect(request):
     #determine user location

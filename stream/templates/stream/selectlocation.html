@@ -2,7 +2,9 @@
 {% block content %}
 <meta name="csrf-token" content="{{ csrf_token }}">
 
-<h5>Note that only Charlottesville and Richmond will work for this demo due to resource limitations.</h5>
+<div class="alert alert-danger" role="alert">
+    <h5>Note that only Charlottesville and Richmond will work for this demo due to resource limitations.</h5>
+</div>
 
 <label for="selection">Choose a city:</label>
 

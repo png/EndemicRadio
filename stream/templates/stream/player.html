@@ -8,24 +8,25 @@
 <div class="grid">
   <div class="grid__col-sizer"></div>
   <div class="grid__gutter-sizer"></div>
-  <div class="grid__item"><img src="https://i.imgur.com/8AYv5Ik.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/2jpy7yO.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/qW7eNlI.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/n3M06QP.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/BNhGcqd.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/TNmDTdL.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/PRc06Uy.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/hHYirXc.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/2Qi40rJ.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/hztiigA.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/3AbaiOH.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/plQzrOk.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/uxYU1h3.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/g4F6d2R.jpg" /></div>
-  <div class="grid__item"><img src="https://i.imgur.com/s2Tqsfq.jpg" /></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/0.jpg" /></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/1.jpg" /></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/2.jpg" /></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/3.jpg" /></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/4.jpg" /></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/5.jpg"/></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/6.jpg" /></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/7.jpg" /></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/8.jpg" /></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/9.jpg"/></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/10.jpg" /></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/11.jpg" /></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/12.jpg" /></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/13.jpg" /></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/14.jpg"/></div>
+  <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/15.jpg"/></div>
 </div>
 
-<p><a class="pagination__next" href="/player/{{location}}2">Next</a></p>
+<p><a class="pagination__next" hidden href="/player/{{location}}2">Next</a></p>
 
 <div class="scroll-status">
   <div class="infinite-scroll-request">
@@ -44,25 +45,42 @@
 <link rel="stylesheet" href="/static/audioplayer.css">
 <script src="/static/audioplayer.js"></script>
 <div class="player">
-<audio id="jsPlay" src="
-https://storage.cloud.google.com/endemicradio-media/Richmond%2C%20Virginia/Music/bensound-creativeminds.mp3" preload="auto" onended="change()" controls autoplay></audio>
 <script>
-    var songs = "{{songs}}"
+{% autoescape off %}
+    var songs = {{songs}}['songs']
 //https://www.jqueryscript.net/other/Clean-Audio-Player-jQuery.html
 $(function() {
   $('audio').audioPlayer();
   console.log(songs[0]['url'])
 });
+
+var song = 1;
 //https://stackoverflow.com/questions/9421505/switch-audio-source-with-jquery-and-html5-audio-tag
 function change() {
     var audio = $("#jsPlay");
+    var url = "https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Music/"+songs[song]["url"];
+    var info = songs[song]["artist"] + " - " + songs[song]["title"]
+    var placeholder = "Placeholder from Bensound file is "+songs[song]["url"]
+    console.log(url)
+    audio.attr("src", url)
 
+    console.log("Loading...")
+    //audio.load()
+    console.log("Playing...")
+    document.getElementById('jsPlay').play();
+
+    console.log("Setting info...")
+    $("#info").text(info)
+    $("#placeholderInfo").text(placeholder)
+    song++;
 }
-var song = 0;
 
 </script>
+<h5 id="info">{{startString}}</h5>
+<h7 id="placeholderInfo">Placeholder from Bensound file is {{startUrl}}</h7>
+<audio id="jsPlay" src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Music/{{startUrl}}" preload="auto" onended="change()" controls></audio>
 </div>
-
+{% endautoescape %}
 <script>
 var msnry = new Masonry( '.grid', {
   itemSelector: 'none', // select no images on init
