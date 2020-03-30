@@ -66,7 +66,7 @@ main {
 @import "https://fonts.googleapis.com/css?family=Source+Serif+Pro";
 
 .grid {
-  max-width: 1200px;
+  max-width: 100%;
 }
 
 /* reveal grid after images loaded */
@@ -76,10 +76,10 @@ main {
 
 .grid__item,
 .grid__col-sizer {
-  width: 32%;
+  width: 23%;
 }
 
-.grid__gutter-sizer { width: 2%; }
+.grid__gutter-sizer { width: 1%; }
 
 /* hide by default */
 .grid.are-images-unloaded .image-grid__item {
@@ -95,7 +95,7 @@ main {
 .grid__item--height2 { height: 220px; background: #C25; }
 .grid__item--height3 { height: 300px; background: #19F; }
 
-.grid__item--width2 { width: 66%; }
+.grid__item--width2 { width: 100%; }
 
 .grid__item img {
   display: block;

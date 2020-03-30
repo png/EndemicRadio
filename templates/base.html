@@ -30,17 +30,15 @@
         data-target="#navbarsExampleDefault"
         aria-controls="navbarsExampleDefault"
         aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+        aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="/"
-              >Home <span class="sr-only">(current)</span></a
-            >
+            <a class="nav-link" href="/">
+                Home <span class="sr-only">(current)</span></a>
 
           </li>
           <li>
@@ -84,30 +82,28 @@
         </form>
       </div>
     </nav>
-    <main role="main" class="flex-shrink-0 main-container">
+    <main role="main" class="flex-shrink-0 main-container" style="overflow:hidden">
       <header >
 
         <div class="container">
 
           <div class="row" id="box-search">
-            <div class="thumbnail text-center">
-                <img src="/media/musicbanner.png" alt="" class="img-responsive">
-
-            </div>
           </div>
         </div>
       </header>
 
       <div class="container">
 
-
+          <div style="overflow:hidden">
+              {% block grid %}{% endblock grid %}
+          </div>
         {% block content %}{% endblock content %}
       </div>
     </main>
     {% block player %}{% endblock player %}
     <footer class="footer">
       <div class="container">
-        <span class="text-center"> - Endemic Radio - @jasonAshley & @kimberlyLouie & @zacBilmen</span>
+        <span class="text-center"> - Endemic Radio - <a href="jash.io">@png</a> & @kimberlyLouie & @zacBilmen</span>
       </div>
     </footer>
 

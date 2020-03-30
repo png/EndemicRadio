@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% block content %}
+{% block grid %}
 
 <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.js"></script>
 
-<div class="grid">
+<div class="grid" style="padding-top:60px">
   <div class="grid__col-sizer"></div>
   <div class="grid__gutter-sizer"></div>
   <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/0.jpg" /></div>
@@ -26,7 +26,7 @@
   <div class="grid__item"><img src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Images/15.jpg"/></div>
 </div>
 
-<p><a class="pagination__next" hidden href="/player/{{location}}2">Next</a></p>
+<p><a class="pagination__next" hidden href="/player/{{location}}#2">Next</a></p>
 
 <div class="scroll-status">
   <div class="infinite-scroll-request">
@@ -40,7 +40,7 @@
   <p class="infinite-scroll-error">No more pages to load</p>
   <p class="infinite-scroll-last">Last page loaded</p>
 </div>
-{% endblock content %}
+{% endblock grid %}
 {% block player %}
 <link rel="stylesheet" href="/static/audioplayer.css">
 <script src="/static/audioplayer.js"></script>
@@ -78,10 +78,11 @@ function change() {
 </script>
 <h5 id="info">{{startString}}</h5>
 <h7 id="placeholderInfo">Placeholder from Bensound file is {{startUrl}}</h7>
-<audio id="jsPlay" src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Music/{{startUrl}}" preload="auto" onended="change()" controls></audio>
+<audio style="z-index: 2147483647;" id="jsPlay" src="https://storage.cloud.google.com/endemicradio-media/{{locationUrl}}/Music/{{startUrl}}" preload="auto" onended="change()" controls></audio>
 </div>
 {% endautoescape %}
 <script>
+var scroll = setInterval(function(){ window.scrollBy(0,1000); }, 20000);
 var msnry = new Masonry( '.grid', {
   itemSelector: 'none', // select no images on init
   columnWidth: '.grid__col-sizer',
@@ -104,6 +105,8 @@ imagesLoaded( '.grid', function() {
   var items = document.querySelectorAll('.grid__item');
   msnry.appended( items );
 });
+
+
 
 var infScroll = new InfiniteScroll( '.grid', {
   path: '.pagination__next',
