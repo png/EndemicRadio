@@ -1,22 +1,31 @@
 {% extends "base.html" %} {% block content %}
 
+
 <div style="background:transparent !important" class="jumbotron">
+
    <h2>Take a look at our Endemic Radio! Listen to local music wherever you go! </h2>
+<container>
 
     <div class="row">
   <div class="column">
 
-    <img src="/media/front.jpg" alt="front" width= "100%" margin= "auto">
+    <img class="front" src="/media/front.jpg" alt="front" width= "100%" margin= "auto">
 
   </div>
   <div class="column">
-    <img src="/media/back.jpg" alt="back" width= "100%" margin= "auto">
+    <img class="back" src="/media/back.jpg" alt="back" width= "100%" margin= "auto">
   </div>
   <div class="column">
-    <img src="/media/side.jpg" alt="side" width= "100%" margin= "auto">
+    <img class="side" src="/media/side.jpg" alt="side" width= "100%" margin= "auto">
   </div>
+        <style type="text/css">
 
+      .front {      transform: rotate(180deg);        }
+      .back {      transform: rotate(180deg);        }
+      .side {      transform: rotate(180deg);        }
 
+</style>
+</container>
 <div class="container-fluid">
     <div style="background:transparent !important" class="jumbotron">
    <h2>This retro radio is 3d printed and is very lightweight! Music is played and powered by a speaker and Raspberry Pi making it easy to take this portable music player anywhere!</h2>
