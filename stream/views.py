@@ -26,6 +26,10 @@ def login(request):
     return render(request, 'stream/login.html', {})
 
 
+def product(request):
+    return render(request, 'stream/product.html', {})
+
+
 def about(request):
     return render(request, 'stream/about.html', {})
 

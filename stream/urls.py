@@ -10,6 +10,7 @@ urlpatterns = [
     path('select/', views.locationSelect, name='selectLocation'),
     path('logout/', views.logout, name='logout'),
     path('about/', views.about, name='about'),
+    path('product/', views.product, name='product'),
     path('wikipediaUpdate/', views.wikipediaUpdate),
     path('playlist/<slug:regionName>', views.getPlaylistByRegion),
     path('artists/<slug:region>', views.getArtistsByRegion)
