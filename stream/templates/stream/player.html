@@ -25,7 +25,7 @@
   <div class="grid__item"><img src="https://i.imgur.com/s2Tqsfq.jpg" /></div>
 </div>
 
-<p><a class="pagination__next" href="/player?1">Next</a></p>
+<p><a class="pagination__next" href="/player/{{location}}2">Next</a></p>
 
 <div class="scroll-status">
   <div class="infinite-scroll-request">
@@ -38,6 +38,29 @@
   </div>
   <p class="infinite-scroll-error">No more pages to load</p>
   <p class="infinite-scroll-last">Last page loaded</p>
+</div>
+{% endblock content %}
+{% block player %}
+<link rel="stylesheet" href="/static/audioplayer.css">
+<script src="/static/audioplayer.js"></script>
+<div class="player">
+<audio id="jsPlay" src="
+https://storage.cloud.google.com/endemicradio-media/Richmond%2C%20Virginia/Music/bensound-creativeminds.mp3" preload="auto" onended="change()" controls autoplay></audio>
+<script>
+    var songs = "{{songs}}"
+//https://www.jqueryscript.net/other/Clean-Audio-Player-jQuery.html
+$(function() {
+  $('audio').audioPlayer();
+  console.log(songs[0]['url'])
+});
+//https://stackoverflow.com/questions/9421505/switch-audio-source-with-jquery-and-html5-audio-tag
+function change() {
+    var audio = $("#jsPlay");
+
+}
+var song = 0;
+
+</script>
 </div>
 
 <script>
@@ -74,4 +97,4 @@ var infScroll = new InfiniteScroll( '.grid', {
 });
 </script>
 
-{% endblock content %}
+{% endblock player %}

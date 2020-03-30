@@ -13,7 +13,7 @@ main {
  margin-left: -2em;
 }
 .main-container {
-     
+
      min-height: 85vh; /* will cover the 100% of viewport */
      overflow: hidden;
      display: block;
@@ -38,6 +38,15 @@ main {
 .thumbnail {
     position: relative;
     padding-bottom: 50px;
+}
+
+
+.player {
+    background-color: #ffffff;
+    overflow: hidden;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 

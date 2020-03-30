@@ -55,7 +55,7 @@ def player(request, location):
     #generate player
     songList = getPlaylistByRegionFunc(location)
     imageList = None
-    return render(request, 'stream/player.html', {"songs":songList, "images":imageList})
+    return render(request, 'stream/player.html', {"songs":songList, "images":imageList, "location":location})
 
 def locationSelect(request):
     #determine user location
